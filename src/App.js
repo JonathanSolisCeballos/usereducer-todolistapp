@@ -18,34 +18,12 @@ function reducer(todos, action) {
         return todo;
       });
     case ACTIONS.DELETE_TODO:
-      return todos.map((todo) => {
-        if (todo.id === action.payload.id) {
-          console.log(`Eliminando ${todo.id}`);
-          return {
-            ...todo,
-            todos: todo.filter((event) => event._id !== action.payload.id),
-          };
-        }
-        return todo;
-      });
+      return todos.filter((todo) => todo.id !== action.payload.id);
 
     default:
       return todos;
   }
 }
-// const person = { name: "encix", age: 21 };
-// const time = "20/08/2021";
-
-// const obj = {
-//   time,
-//   person: person.name,
-// };
-
-// const todos = [
-//   {id:1,name:'hola',completed:false}, //todo
-//   {id:2,name:'tarea 2',completed:true},//todo
-//   {id:3,name:'tarea 3',completed:false}//todo
-// ]
 
 function newTodo(name) {
   console.log("Creando nuevo todo con e nombre de ", name);
@@ -60,10 +38,10 @@ function App() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // console.log("ME ENVIE WE");
-
-    dispatch({ type: ACTIONS.ADD_TODO, payload: { name: name } });
-    setName("");
+    if (name !== "" || null) {
+      dispatch({ type: ACTIONS.ADD_TODO, payload: { name: name } });
+      setName("");
+    }
   };
 
   const handleCompleteTodo = (id) => {
