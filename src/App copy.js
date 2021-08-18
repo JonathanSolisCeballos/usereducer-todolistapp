@@ -19,7 +19,7 @@ function reducer(todos, action) {
         }
         return todo;
       });
-
+      
     case ACTIONS.DELETE_TODO:
       return todos.filter((todo) => todo.id !== action.payload.id);
 
@@ -30,7 +30,7 @@ function reducer(todos, action) {
         }
         return todo;
       });
-    // return [...todos, newTodo(action.payload.name)];
+      // return [...todos, newTodo(action.payload.name)];
 
     default:
       return todos;
@@ -47,9 +47,8 @@ const initialState = [];
 function App() {
   const [todos, dispatch] = useReducer(reducer, initialState);
   const [name, setName] = useState("");
-  const [newName, setNewName] = useState("");
-
-  const [todoEditId, setTodoEditId] = useState(1);
+  const [newName, setNewName] =useState("")
+  const [nameEdit, setNameEdit] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -68,31 +67,37 @@ function App() {
   };
 
   const handleEditTodo = (id, name) => {
-    setTodoEditId(id);
-    setNewName(name);
+    setNameEdit(true);
+    setNewName(name)
+    dispatch({ type: ACTIONS.EDIT_TODO, payload: {id:id, name: newName } });
+    // console.log(`editando ${id}...`);
+    // dispatch({ type: ACTIONS.EDIT_TODO, payload: { id: id } });
   };
-
-
-  const handleOkEditTodo = (id)=>{
-    setTodoEditId(1);
-
-    dispatch({ type: ACTIONS.EDIT_TODO, payload: { id: id, name: newName } });
-
-  }
-
-  
 
   console.log(todos);
   return (
     <>
       <h1>Use Reducer Todo List App Example</h1>
       <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          placeholder="New task..."
-        />
+        {nameEdit !== true && (
+          <input
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder="New task..."
+          />
+        )}
+        {nameEdit === true && (
+          <>
+            <input
+              type="text"
+              value={newName}
+              onChange={(e) => setNewName(e.target.value)}
+              placeholder="New task..."
+            />
+            <button onClick={() => setNameEdit(false)}>Ok</button>
+          </>
+        )}
       </form>
       {todos.map((todo, index) => {
         return (
@@ -104,24 +109,12 @@ function App() {
                 textDecoration: todo.completed ? "line-through" : "none",
               }}
             >
-              {todoEditId !== todo.id ? (
-                <>
-                  {todo.name}
-                  <button onClick={() => handleCompleteTodo(todo.id)}>🟢</button>
-                  <button onClick={() => handleDeleteTodo(todo.id)}>⛔</button>
-                  <button onClick={() => handleEditTodo(todo.id, todo.name)}>✍</button>
-                </>
-              ) : (
-                <>
-                  <input
-                    type="text"
-                    value={newName}
-                    onChange={(e) => setNewName(e.target.value)}
-                    placeholder="New task..."
-                  />
-                  <button onClick={()=> handleOkEditTodo(todo.id)}>Ok</button>
-                </>
-              )}
+              {todo.name}
+              <button onClick={() => handleCompleteTodo(todo.id)}>🟢</button>
+              <button onClick={() => handleDeleteTodo(todo.id)}>⛔</button>
+              <button onClick={() => handleEditTodo(todo.id, todo.name)}>
+                ✍
+              </button>
             </li>
           </>
         );
