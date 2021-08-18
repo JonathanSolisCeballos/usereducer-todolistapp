@@ -1,4 +1,4 @@
-import react, { useState, useReducer } from "react";
+import { useState, useReducer } from "react";
 
 const ACTIONS = {
   ADD_TODO: "add-todo",
@@ -30,7 +30,6 @@ function reducer(todos, action) {
         }
         return todo;
       });
-    // return [...todos, newTodo(action.payload.name)];
 
     default:
       return todos;
@@ -72,15 +71,11 @@ function App() {
     setNewName(name);
   };
 
-
-  const handleOkEditTodo = (id)=>{
+  const handleOkEditTodo = (id) => {
     setTodoEditId(1);
 
     dispatch({ type: ACTIONS.EDIT_TODO, payload: { id: id, name: newName } });
-
-  }
-
-  
+  };
 
   console.log(todos);
   return (
@@ -107,9 +102,13 @@ function App() {
               {todoEditId !== todo.id ? (
                 <>
                   {todo.name}
-                  <button onClick={() => handleCompleteTodo(todo.id)}>🟢</button>
+                  <button onClick={() => handleCompleteTodo(todo.id)}>
+                    🟢
+                  </button>
                   <button onClick={() => handleDeleteTodo(todo.id)}>⛔</button>
-                  <button onClick={() => handleEditTodo(todo.id, todo.name)}>✍</button>
+                  <button onClick={() => handleEditTodo(todo.id, todo.name)}>
+                    ✍
+                  </button>
                 </>
               ) : (
                 <>
@@ -119,7 +118,7 @@ function App() {
                     onChange={(e) => setNewName(e.target.value)}
                     placeholder="New task..."
                   />
-                  <button onClick={()=> handleOkEditTodo(todo.id)}>Ok</button>
+                  <button onClick={() => handleOkEditTodo(todo.id)}>Ok</button>
                 </>
               )}
             </li>
